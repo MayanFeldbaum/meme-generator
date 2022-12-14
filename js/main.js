@@ -1,6 +1,7 @@
 function init() {
     renderGallery()
     // resizeCanvas()
+    addListeners()
 }
 
 function toggleShown(tab) {

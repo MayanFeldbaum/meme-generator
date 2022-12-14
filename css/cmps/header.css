@@ -34,7 +34,7 @@
   
   @media (max-width: 780px) {
     .main-header {
-      position: fixed;
+      /* position: fixed; */
       width: 100%;
       z-index: 1;
     }

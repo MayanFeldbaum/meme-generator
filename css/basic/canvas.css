@@ -8,7 +8,7 @@ canvas {
     background-color: rgb(225, 228, 232);
 place-content: center;
 flex-wrap: wrap;
-margin-top: 5vh;
+margin-top: 20px;
 }
 
 .canvas nav {
@@ -27,6 +27,7 @@ nav>* {
 .shapes-btns button{
     border:0px;
 }
+
 
 .colors-btns img{
     width: 30px;

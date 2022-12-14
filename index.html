@@ -30,21 +30,29 @@
             </section>
         </section>
 
-            <section class="meme-container hidden">
-                <section class="canvas-container flex">
+        <section class="meme-container hidden">
+            <section class="canvas-container flex">
                 <canvas id="my-canvas" height="500" width="500"></canvas>
                 <section class="editor-options">
                     <nav>
                         <section class="colors-btns">
+                            <label for="text"></label>
+                            <input class="text" type="text" onkeypress="watchTextInput(event)" id="text" name="text"
+                                placeholder="Enter text">
+                                <div>
+                                <button onClick="onAddTextLine()"><img src="./img/add.png"></button>
+                                <button onClick="onSwitchLines()"><img src="./img/up-and-down-opposite-double-arrows-side-by-side.png"></button>
+                            </div>
                             <div>
-                                <label for="text"></label>
-                                <input class="text" type="text" id="text" name="text" placeholder="Enter text">
-
                                 <label for="userColor"><img src="./img/brush.svg" alt="color"></label>
                                 <input class="color" type="color" id="color" name="color" value="#D68C45">
                             </div>
+                            <div>
+                                <button onClick="onIncreaseFont()"><img src="./img/increase font - icon.png"></button>
+                                <button onClick="onDecreaseFont()"><img src="./img/decrease font - icon.png"></button>
+                            </div>
                         </section>
-                
+
                         <section class="shapes-btns">
                             <select id="shapes" onchange="setShape(this)">
                                 <option value="triangle">triangle</option>
@@ -56,19 +64,20 @@
                             <button onclick="clearCanvas()">Clear</button>
                         </section>
                     </nav>
-                
+
                     <section class="upload-share">
                         <input type="file" class="file-input btn" name="image" onchange="onImgInput(event)" />
-                
+
                         <button class="btn share-img" onclick="onUploadImg()">Share</button>
-                
-                        <a href="#" class="btn download-img" onclick="downloadImg(this)" download="my-img.jpg">Download</a>
-                
+
+                        <a href="#" class="btn download-img" onclick="downloadImg(this)"
+                            download="my-img.jpg">Download</a>
+
                     </section>
                 </section>
-                </section>
-       </section>
-       
+            </section>
+        </section>
+
         <section class="saved hidden">Saved</section>
         <section class="about hidden">About</section>
     </section>
