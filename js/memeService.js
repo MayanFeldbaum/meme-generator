@@ -1,5 +1,7 @@
 var gKeywordSearchCountMap = { 'funny': 12, 'cat': 16, 'baby': 2 }
 var gSearchKeys = ''
+var gCanvasHeight
+var gCanvasWidth
 
 var gImgs = [
     { id: 1, url: 'img/1.jpg', keywords: ['view'] },
@@ -18,29 +20,44 @@ var gMeme = {
             size: 30,
             font: 'Impact',
             align: 'left',
-            color: 'black',
-            posX: 200,
-            posY: 200,
+            strokeColor: 'black',
+            fillerColor: 'white',
+            posX: 150,
+            posY: 50,
             initial: true,
             isDrag: false,
+            isHighlighted: true,
         },
         {
             txt: 'Your Text',
             size: 30,
             font: 'Impact',
             align: 'left',
-            color: 'black',
-            posX: 250,
-            posY: 250,
+            strokeColor: 'black',
+            fillerColor: 'white',
+            posX: 150,
+            posY: 350,
             initial: true,
             isDrag: false,
+            isHighlighted: false,
         },
     ]
 }
 
+function setCanvasHeight() {
+    gCanvasHeight = getCanvasHeight()
+}
+function setCanvasWidth() {
+    gCanvasWidth = getCanvasWidth()
+}
+
 function setImg(imgId) {
-    console.log(imgId);
     gMeme.selectedImgId = imgId
+}
+
+function setMeme(meme) {
+    console.log(meme);
+    gMeme = meme
 }
 
 function getMeme() {
@@ -48,11 +65,12 @@ function getMeme() {
 }
 
 function setSearchKeys(txt) {
-    if (txt === 'Backspace') gSearchKeys=gSearchKeys.substring(0, gSearchKeys.length - 1)
+    if (txt === 'Backspace') gSearchKeys = gSearchKeys.substring(0, gSearchKeys.length - 1)
     else gSearchKeys += txt
 }
+
 function getgImgs() {
-    if (gSearchKeys === '') return gImgs
+    if (!gSearchKeys) return gImgs
     else {
         var filterImgs = gImgs.filter(img => {
             const keysList = img.keywords
@@ -62,8 +80,12 @@ function getgImgs() {
     } return filterImgs
 }
 
-function updateMemeColor(color, line) {
-    gMeme.lines[line].color = color
+function updateStrokeColor(color, line) {
+    gMeme.lines[line].strokeColor = color
+}
+
+function updateFillerColor(color, line) {
+    gMeme.lines[line].fillerColor = color
 }
 
 function setLineTxt(text, line) {
@@ -72,7 +94,7 @@ function setLineTxt(text, line) {
         gMeme.lines[line].initial = false
     }
 
-    if (text === 'Backspace') gMeme.lines[line].txt=gMeme.lines[line].txt.substring(0, gMeme.lines[line].txt.length - 1)
+    if (text === 'Backspace') gMeme.lines[line].txt = gMeme.lines[line].txt.substring(0, gMeme.lines[line].txt.length - 1)
     else gMeme.lines[line].txt += text
     console.log(gMeme.lines[line].txt)
 }
@@ -83,21 +105,23 @@ function increaseFont(line) {
 
 function decreaseFont(line) {
     if (gMeme.lines[line].size > 20) {
-        gMeme.lines[line].size = gMeme.lines[0].size - 1
+        gMeme.lines[line].size = gMeme.lines[line].size - 1
     }
 }
 
-function addTextLine() {
+function addTextLine(text) {
     const newLine = {
-        txt: 'Your Text',
+        txt: text,
         size: 30,
         font: 'Impact',
         align: 'left',
-        color: 'black',
-        posX: 100,
-        posY: 100,
+        strokeColor: 'black',
+        fillerColor: 'white',
+        posX: gCanvasWidth / 2 - 55,
+        posY: gCanvasHeight / 2,
         initial: true,
         isDrag: false,
+        isHighlighted: false
     }
     gMeme.lines.push(newLine)
 }
@@ -136,4 +160,39 @@ function alignLeft(line) {
 
 function setFont(font, line) {
     gMeme.lines[line].font = font
+}
+
+function resetMeme() {
+    gMeme = {
+        selectedImgId: 1,
+        selectedLineIdx: 0,
+        lines: [
+            {
+                txt: 'Your Text',
+                size: 30,
+                font: 'Impact',
+                align: 'left',
+                strokeColor: 'black',
+                fillerColor: 'white',
+                posX: 150,
+                posY: 50,
+                initial: true,
+                isDrag: false,
+                isHighlighted: true,
+            },
+            {
+                txt: 'Your Text',
+                size: 30,
+                font: 'Impact',
+                align: 'left',
+                strokeColor: 'black',
+                fillerColor: 'white',
+                posX: 150,
+                posY: 350,
+                initial: true,
+                isDrag: false,
+                isHighlighted: false,
+            },
+        ]
+    }
 }

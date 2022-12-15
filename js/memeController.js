@@ -1,3 +1,4 @@
+const STORAGE_KEY = 'MemeDB'
 let gElCanvas
 let gCtx
 let gCurrMeme
@@ -6,10 +7,13 @@ let gstrokeStyleColor
 let gCurrLine = 0
 const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend']
 let gStartPos
+var gMemes =[]
 
 function init() {
     gElCanvas = document.getElementById('my-canvas')
     gCtx = gElCanvas.getContext('2d')
+    setCanvasHeight()
+    setCanvasWidth()
     renderGallery()
     // resizeCanvas()
     addListeners()
@@ -21,8 +25,6 @@ function toggleShown(tab) {
     const elSaved = document.querySelector('.saved')
     const elAbout = document.querySelector('.about')
     const elMeme = document.querySelector('.meme-container')
-    if (elShown.classList.contains('shown')) return
-    else {
 
         if (elShown.innerText !== elGallery.innerText) {
             elGallery.classList.remove('shown')
@@ -42,10 +44,12 @@ function toggleShown(tab) {
             elMeme.classList.remove('shown')
             elMeme.classList.add('hidden')
         }
+
+        if (elShown.innerText === elSaved.innerText){
+            renderSavedMeme()
+        }
         elShown.classList.remove('hidden')
         elShown.classList.add('shown')
-    }
-
 }
 
 // function resizeCanvas() {
@@ -63,6 +67,7 @@ function openMeme() {
 }
 
 function onImgSelect(img) {
+    resetMeme()
     const imgId = img.alt
     setImg(imgId)
     renderMeme()
@@ -70,8 +75,6 @@ function onImgSelect(img) {
 
 function renderMeme() {
     openMeme()
-    // gElCanvas = document.getElementById('my-canvas')
-    // gCtx = gElCanvas.getContext('2d')
     gCurrMeme = getMeme()
     drawImg()
 }
@@ -91,18 +94,22 @@ function drawImg() {
 }
 
 function drawText(text, x, y, idx) {
+    console.log(gMeme);
     const font = gCurrMeme.lines[idx].size + 'px' + ' ' + gCurrMeme.lines[idx].font
     gCtx.lineWidth = 2
-    gCtx.strokeStyle = gCurrMeme.lines[idx].color
+    gCtx.strokeStyle = gCurrMeme.lines[idx].strokeColor
+    gCtx.fillStyle = gCurrMeme.lines[idx].fillerColor
     gCtx.font = font
     gCtx.textAlign = gCurrMeme.lines[idx].align
     gCtx.textBaseline = 'middle'
     gCtx.strokeText(text, x, y)
+    gCtx.fillText(text, x, y)
 }
 // ADDLISTENERS //
 
 function addListeners() {
-    document.getElementById('color').addEventListener('input', watchColorPicker)
+    document.getElementById('strokeColor').addEventListener('input', strokeColorPicker)
+    document.getElementById('fillerColor').addEventListener('input', fillerColorPicker)
     addMouseListeners()
     addTouchListeners()
     // Listen for resize ev
@@ -129,6 +136,7 @@ function onDown(ev) {
     const pos = getEvPos(ev)
     if (isTextClicked(pos) >= 0) {
         gCurrLine = isTextClicked(pos)
+        document.getElementById('enter-text').value = getMeme().lines[gCurrLine].txt
         setTextDrag(gCurrLine, true)
         //Save the pos we start from
         gStartPos = pos
@@ -152,7 +160,7 @@ function onMove(ev) {
 
 function onUp() {
     setTextDrag(gCurrLine, false)
-    gElCanvas.style.cursor ='grab'
+    gElCanvas.style.cursor = 'grab'
     document.body.style.cursor = 'auto'
 }
 
@@ -197,17 +205,25 @@ function isTextClicked(ev) {
 
 // SET CHANGES //
 
-function watchColorPicker(ev) {
-    userColor = ev.target.value
-    updateMemeColor(userColor, gCurrLine)
+function strokeColorPicker(ev) {
+    const strokeColor = ev.target.value
+    updateStrokeColor(strokeColor, gCurrLine)
+    renderMeme(gCurrMeme)
+}
+
+function fillerColorPicker(ev) {
+    const fillerColor = ev.target.value
+    updateFillerColor(fillerColor, gCurrLine)
     renderMeme(gCurrMeme)
 }
 
 function watchTextInput(ev) {
-    if (ev.key === 'Enter') return
-    userText = ev.key
-    setLineTxt(userText, gCurrLine)
-    renderMeme(gCurrMeme)
+    const characters = [...Array(95).keys()].map(i => String.fromCharCode(i + 32))
+    if (characters.includes(ev.key) || ev.key === 'Backspace') {
+        userText = ev.key
+        setLineTxt(userText, gCurrLine)
+        renderMeme(gCurrMeme)
+    }
 }
 
 function onIncreaseFont() {
@@ -221,45 +237,79 @@ function onDecreaseFont() {
 }
 
 function onAddTextLine() {
-    addTextLine()
+    addTextLine('Your Text')
     gCurrLine++
+    document.getElementById('enter-text').value = ''
     renderMeme(gCurrMeme)
 }
 
 function onSwitchLines() {
     gCurrLine++
+    document.getElementById('enter-text').value = ''
     if (gCurrMeme.lines.length === gCurrLine) gCurrLine = 0
+
 }
 
-function onTrashLine(){
+function onTrashLine() {
     trashLine(gCurrLine)
     renderMeme(gCurrMeme)
 }
 
-function onAlignRight(){
+function onAlignRight() {
     alignRight(gCurrLine)
     renderMeme(gCurrMeme)
 }
 
-function onAlignCenter(){
+function onAlignCenter() {
     alignCenter(gCurrLine)
     renderMeme(gCurrMeme)
 }
 
-function onAlignLeft(){
+function onAlignLeft() {
     alignLeft(gCurrLine)
     renderMeme(gCurrMeme)
 }
 
-function onSetFont(ev){
+function onSetFont(ev) {
     font = ev.value
     setFont(font, gCurrLine)
-    renderMeme(gCurrMeme)  
+    renderMeme(gCurrMeme)
 }
 
-function searchTextInput(ev){
-    if (ev.key === 'Enter') return
-    searchText = ev.key
-    setSearchKeys(searchText)
-    renderGallery()
+function searchTextInput(ev) {
+    const characters = [...Array(95).keys()].map(i => String.fromCharCode(i + 32))
+    if (characters.includes(ev.key) || ev.key === 'Backspace') {
+        searchText = ev.key
+        setSearchKeys(searchText)
+        renderGallery()
+    }
+}
+
+function getCanvasWidth() {
+    return gElCanvas.width
+}
+
+function getCanvasHeight() {
+    return gElCanvas.height
+}
+
+function addSticker(ev){
+    const sticker= ev.id
+    addTextLine(ev.id)
+    gCurrLine++
+    renderMeme(gCurrMeme)
+}
+
+function saveMeme(){
+gMemes.push(gCurrMeme)
+saveToStorage(STORAGE_KEY, gMemes)
+}
+
+function setSavedMeme(id){
+    console.log(id, gMemes);
+    const savedMeme = gMemes.find(meme=>id===+meme.selectedImgId)
+    gCurrMeme=savedMeme
+    console.log(gCurrMeme);
+    setMeme(gCurrMeme)
+    renderMeme()
 }

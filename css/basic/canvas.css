@@ -53,3 +53,14 @@ nav>* {
 input {
     margin-bottom: 10px;
 }
+
+.highlighted{
+    border: 3px black solid;
+}
+
+.stickers button{
+border: none;
+background-color: transparent;
+    font-size: 50px;
+}
+

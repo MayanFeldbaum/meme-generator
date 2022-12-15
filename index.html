@@ -15,12 +15,12 @@
             <div class="logo">Logo</div>
             <nav class="main-nav">
                 <ul class="flex clean-list nav-list">
-                    <li><a href="#" id="gallery" onClick="toggleShown(this)">Gallery</a></li>
-                    <li><a href="#" id="saved" onClick="toggleShown(this)">Saved</a></li>
-                    <li><a href="#" id="about" onClick="toggleShown(this)">About</a></li>
+                    <li><a href="#" id="gallery" onclick="toggleShown(this)">Gallery</a></li>
+                    <li><a href="#" id="saved" onclick="toggleShown(this)">Saved</a></li>
+                    <li><a href="#" id="about" onclick="toggleShown(this)">About</a></li>
                 </ul>
             </nav>
-            <button class="menu-toggle-btn" onClick="toggleMenu()">☰</button>
+            <button class="menu-toggle-btn" onclick="toggleMenu()">☰</button>
         </div>
     </header>
 
@@ -28,7 +28,8 @@
         <section class="search-container">
             <input type="file" class="file-input btn" name="image" onchange="onImgInput(event)" />
             <label for="text"></label>
-            <input class="text" type="text" onkeydown="searchTextInput(event)" id="serach-text" name="text" placeholder="Enter text">
+            <input class="text" type="text" onkeydown="searchTextInput(event)" id="serach-text" name="text"
+                placeholder="Enter text">
         </section>
         <section class="gallery shown">
             <section class="gallery-container">
@@ -38,38 +39,51 @@
         <section class="meme-container hidden">
             <section class="canvas-container flex">
                 <div class="canvas-container1">
-                <canvas id="my-canvas" height="500" width="500"></canvas>
+                    <canvas id="my-canvas" height="500" width="500"></canvas>
                 </div>
                 <section class="editor-options">
                     <nav>
                         <section class="colors-btns">
                             <label for="text"></label>
-                            <input class="text" type="text" onkeydown="watchTextInput(event)" id="text" name="text"
-                                placeholder="Enter text">
-                                <div>
-                                <button onClick="onAddTextLine()"><img src="./img/add.png"></button>
-                                <button onClick="onSwitchLines()"><img src="./img/up-and-down-opposite-double-arrows-side-by-side.png"></button>
-                                <button onClick="onTrashLine()"><img src="./img/trash.png"></button>
+                            <input class="text enter-text" type="text" onkeydown="watchTextInput(event)" id="enter-text"
+                                name="text" placeholder="Enter text">
+                            <div>
+                                <button onclick="onAddTextLine()"><img src="./img/add.png"></button>
+                                <button onclick="onSwitchLines()"><img
+                                        src="./img/up-and-down-opposite-double-arrows-side-by-side.png"></button>
+                                <button onclick="onTrashLine()"><img src="./img/trash.png"></button>
                             </div>
                             <div>
-                                <button onClick="onIncreaseFont()"><img src="./img/increase font - icon.png"></button>
-                                <button onClick="onDecreaseFont()"><img src="./img/decrease font - icon.png"></button>
-                                <button onClick="onAlignRight()"><img src="./img/align-to-right.png"></button>
-                                <button onClick="onAlignCenter()"><img src="./img/center-text-alignment.png"></button>
-                                <button onClick="onAlignLeft()"><img src="./img/align-to-left.png"></button>
+                                <button onclick="onIncreaseFont()"><img src="./img/increase font - icon.png"></button>
+                                <button onclick="onDecreaseFont()"><img src="./img/decrease font - icon.png"></button>
+                                <button onclick="onAlignRight()"><img src="./img/align-to-right.png"></button>
+                                <button onclick="onAlignCenter()"><img src="./img/center-text-alignment.png"></button>
+                                <button onclick="onAlignLeft()"><img src="./img/align-to-left.png"></button>
                             </div>
                         </section>
-
-                        <section class="fonts-options">
-                            <select id="fonts" onchange="onSetFont(this)">
-                                <option value="Impact">Impact</option>
-                                <option value="Arial">Arial</option>
-                                <option value="Times New Roman">Times New Roman</option>
-                                <option value="Courier New">Courier New</option>
-                            </select>
-                            <input class="color" type="color" id="color" name="color" value="#000000">
-                            <label for="userColor"><img src="./img/brush.svg" alt="color"></label>
-                        </section>
+                        <div>
+                            <section class="fonts-options">
+                                <select id="fonts" onchange="onSetFont(this)">
+                                    <option value="Impact">Impact</option>
+                                    <option value="Arial">Arial</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Courier New">Courier New</option>
+                                </select>
+                                <label for="strokeColor"><img src="./img/brush.svg" alt="color"></label>
+                                <input class="color" type="color" id="strokeColor" name="strokeColor" value="#000000">
+                                <input class="color" type="color" id="fillerColor" name="fillerColor" value="#ffffff">
+                                <label for="fillerColor"><img src="./img/paint-bucket.svg" alt="color"></label>
+                            </section>
+                        </div>
+                        <div>
+                            <section class="stickers">
+                                <button onclick="addSticker(this)" id="&#128512">&#128512</button>
+                                <button onclick="addSticker(this)" id="&#128525">&#128525</button>
+                                <button onclick="addSticker(this)" id="&#128512">&#128512</button>
+                                <button onclick="addSticker(this)" id="&#128151">&#128151</button>
+                                <button onclick="addSticker(this)" id="&#128064">&#128064</button>
+                            </section>
+                        </div>
                     </nav>
 
                     <section class="upload-share">
@@ -77,23 +91,27 @@
 
                         <a href="#" class="btn download-img" onclick="downloadImg(this)"
                             download="my-img.jpg">Download</a>
+                        <button onclick="saveMeme()">Save</button>
 
                     </section>
                 </section>
             </section>
         </section>
 
-        <section class="saved hidden">Saved</section>
-        <section class="about hidden">About</section>
-    </section>
+        <section class="saved hidden">
+            <section class="savedMeme-container">
+            </section>
+            <section class="about hidden">About</section>
+        </section>
 
-
-    <script src="js/upload.controller.js"></script>
-    <script src="js/upload.service.js"></script>
-    <script src="js/memeController.js"></script>
-    <script src="js/memeService.js"></script>
-    <script src="js/galleryController.js"></script>
-    <script src="js/main.js"></script>
+        <script src="js/storage.service.js"></script>
+        <script src="js/memeController.js"></script>
+        <script src="js/upload.controller.js"></script>
+        <script src="js/upload.service.js"></script>
+        <script src="js/memeController.js"></script>
+        <script src="js/memeService.js"></script>
+        <script src="js/savedMemeController.js"></script>
+        <script src="js/galleryController.js"></script>
 </body>
 
 </html>
