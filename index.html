@@ -25,6 +25,11 @@
     </header>
 
     <section class="pages">
+        <section class="search-container">
+            <input type="file" class="file-input btn" name="image" onchange="onImgInput(event)" />
+            <label for="text"></label>
+            <input class="text" type="text" onkeydown="searchTextInput(event)" id="serach-text" name="text" placeholder="Enter text">
+        </section>
         <section class="gallery shown">
             <section class="gallery-container">
             </section>
@@ -32,42 +37,42 @@
 
         <section class="meme-container hidden">
             <section class="canvas-container flex">
+                <div class="canvas-container1">
                 <canvas id="my-canvas" height="500" width="500"></canvas>
+                </div>
                 <section class="editor-options">
                     <nav>
                         <section class="colors-btns">
                             <label for="text"></label>
-                            <input class="text" type="text" onkeypress="watchTextInput(event)" id="text" name="text"
+                            <input class="text" type="text" onkeydown="watchTextInput(event)" id="text" name="text"
                                 placeholder="Enter text">
                                 <div>
                                 <button onClick="onAddTextLine()"><img src="./img/add.png"></button>
                                 <button onClick="onSwitchLines()"><img src="./img/up-and-down-opposite-double-arrows-side-by-side.png"></button>
-                            </div>
-                            <div>
-                                <label for="userColor"><img src="./img/brush.svg" alt="color"></label>
-                                <input class="color" type="color" id="color" name="color" value="#D68C45">
+                                <button onClick="onTrashLine()"><img src="./img/trash.png"></button>
                             </div>
                             <div>
                                 <button onClick="onIncreaseFont()"><img src="./img/increase font - icon.png"></button>
                                 <button onClick="onDecreaseFont()"><img src="./img/decrease font - icon.png"></button>
+                                <button onClick="onAlignRight()"><img src="./img/align-to-right.png"></button>
+                                <button onClick="onAlignCenter()"><img src="./img/center-text-alignment.png"></button>
+                                <button onClick="onAlignLeft()"><img src="./img/align-to-left.png"></button>
                             </div>
                         </section>
 
-                        <section class="shapes-btns">
-                            <select id="shapes" onchange="setShape(this)">
-                                <option value="triangle">triangle</option>
-                                <option value="rect">Rect</option>
-                                <option value="text">Text</option>
-                                <option value="line">Line</option>
-                                <option value="arc">Arc</option>
+                        <section class="fonts-options">
+                            <select id="fonts" onchange="onSetFont(this)">
+                                <option value="Impact">Impact</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Courier New">Courier New</option>
                             </select>
-                            <button onclick="clearCanvas()">Clear</button>
+                            <input class="color" type="color" id="color" name="color" value="#000000">
+                            <label for="userColor"><img src="./img/brush.svg" alt="color"></label>
                         </section>
                     </nav>
 
                     <section class="upload-share">
-                        <input type="file" class="file-input btn" name="image" onchange="onImgInput(event)" />
-
                         <button class="btn share-img" onclick="onUploadImg()">Share</button>
 
                         <a href="#" class="btn download-img" onclick="downloadImg(this)"

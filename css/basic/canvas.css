@@ -4,11 +4,17 @@ canvas {
     background-color: white;
 }
 
+
 .canvas-container {
     background-color: rgb(225, 228, 232);
-place-content: center;
-flex-wrap: wrap;
-margin-top: 20px;
+    margin-top: 20px;
+    flex-basis: 1;
+    flex-wrap: wrap;
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+    place-content: center;
+    padding: 10px;
 }
 
 .canvas nav {
@@ -24,19 +30,26 @@ nav>* {
     margin-bottom: 5px;
 }
 
-.shapes-btns button{
-    border:0px;
+.shapes-btns button {
+    border: 0px;
 }
 
 
-.colors-btns img{
-    width: 30px;
-    height: 30px;
+.colors-btns img {
+    width: 20px;
+    height: 20px;
 }
 
-.editor-options{
+.fonts-options img {
+    width: 20px;
+    height: 20px;
+}
+
+.editor-options {
     flex-basis: 50%;
     text-align: center;
-    margin-top: 5vh;
 }
 
+input {
+    margin-bottom: 10px;
+}
