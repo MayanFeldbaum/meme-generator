@@ -1,61 +1,60 @@
 const STORAGE_KEY = 'MemeDB'
+const KEYWORDS_KEY = 'KeywordsDB'
+const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend']
 let gElCanvas
 let gCtx
 let gCurrMeme
 let gCurrImg
 let gstrokeStyleColor
 let gCurrLine = 0
-const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend']
 let gStartPos
-var gMemes =[]
+var gMemes = []
+
+// OPEN MEME //
 
 function init() {
     gElCanvas = document.getElementById('my-canvas')
     gCtx = gElCanvas.getContext('2d')
-    setCanvasHeight()
-    setCanvasWidth()
     renderGallery()
-    // resizeCanvas()
     addListeners()
+    renderKeyWords()
 }
 
 function toggleShown(tab) {
     const elShown = document.querySelector(`.${tab.id}`)
     const elGallery = document.querySelector('.gallery')
     const elSaved = document.querySelector('.saved')
-    const elAbout = document.querySelector('.about')
     const elMeme = document.querySelector('.meme-container')
 
-        if (elShown.innerText !== elGallery.innerText) {
-            elGallery.classList.remove('shown')
-            elGallery.classList.add('hidden')
-        }
-        if (elShown.innerText !== elSaved.innerText) {
-            elSaved.classList.remove('shown')
-            elSaved.classList.add('hidden')
-        }
+    if (elShown.innerText === elGallery.innerText) {
+        elGallery.classList.remove('hidden')
+        elGallery.classList.add('shown')
+        elMeme.classList.remove('shown')
+        elMeme.classList.add('hidden')
+        elSaved.classList.remove('shown')
+        elSaved.classList.add('hidden')
+        resetSearchKeys()
+        renderGallery()
+    }
+    if (elShown.innerText === elSaved.innerText) {
+        elSaved.classList.remove('hidden')
+        elSaved.classList.add('shown')
+        elMeme.classList.remove('shown')
+        elMeme.classList.add('hidden')
+        elGallery.classList.remove('shown')
+        elGallery.classList.add('hidden')
+        renderSavedMeme()
+    }
 
-        if (elShown.innerText !== elAbout.innerText) {
-            elAbout.classList.remove('shown')
-            elAbout.classList.add('hidden')
-        }
-
-        if (elShown.innerText !== elMeme.innerText) {
-            elMeme.classList.remove('shown')
-            elMeme.classList.add('hidden')
-        }
-
-        if (elShown.innerText === elSaved.innerText){
-            renderSavedMeme()
-        }
-        elShown.classList.remove('hidden')
-        elShown.classList.add('shown')
+    if (elShown.innerText === elMeme.innerText) {
+        elMeme.classList.remove('hidden')
+        elMeme.classList.add('shown')
+        elSaved.classList.remove('shown')
+        elSaved.classList.add('hidden')
+        elGallery.classList.remove('shown')
+        elGallery.classList.add('hidden')
+    }
 }
-
-// function resizeCanvas() {
-//     const elContainer = document.querySelector('.canvas-container1')
-//     gElCanvas.width = elContainer.offsetWidth - 20
-// }
 
 function openMeme() {
     const elGallery = document.querySelector('.gallery')
@@ -64,25 +63,28 @@ function openMeme() {
     const elMeme = document.querySelector('.meme-container')
     elMeme.classList.remove('hidden')
     elMeme.classList.add('shown')
+    const elSaved = document.querySelector('.saved')
+    elSaved.classList.remove('shown')
+    elSaved.classList.add('hidden')
 }
 
 function onImgSelect(img) {
     resetMeme()
     const imgId = img.alt
     setImg(imgId)
+    gCurrMeme = getMeme()
     renderMeme()
 }
 
 function renderMeme() {
     openMeme()
-    gCurrMeme = getMeme()
+    // gCurrMeme = getMeme()
     drawImg()
 }
 
 function drawImg() {
     const elImg = new Image()
     elImg.src = `img/${gCurrMeme.selectedImgId}.jpg`
-    console.log(elImg.src);
     elImg.onload = () => {
         gCtx.drawImage(elImg, 0, 0, gElCanvas.width, gElCanvas.height)
         const MemeLines = gCurrMeme.lines
@@ -94,7 +96,6 @@ function drawImg() {
 }
 
 function drawText(text, x, y, idx) {
-    console.log(gMeme);
     const font = gCurrMeme.lines[idx].size + 'px' + ' ' + gCurrMeme.lines[idx].font
     gCtx.lineWidth = 2
     gCtx.strokeStyle = gCurrMeme.lines[idx].strokeColor
@@ -105,6 +106,7 @@ function drawText(text, x, y, idx) {
     gCtx.strokeText(text, x, y)
     gCtx.fillText(text, x, y)
 }
+
 // ADDLISTENERS //
 
 function addListeners() {
@@ -113,10 +115,10 @@ function addListeners() {
     addMouseListeners()
     addTouchListeners()
     // Listen for resize ev
-    window.addEventListener('resize', () => {
-        resizeCanvas()
-        renderMeme()
-    })
+    // window.addEventListener('resize', () => {
+    //     resizeCanvas()
+    //     renderMeme()
+    // })
 }
 
 function addMouseListeners() {
@@ -165,20 +167,13 @@ function onUp() {
 }
 
 function getEvPos(ev) {
-    // Gets the offset pos , the default pos
     let pos = {
         x: ev.offsetX,
         y: ev.offsetY,
     }
-    // Check if its a touch ev
-    console.log('ev:', ev)
     if (TOUCH_EVS.includes(ev.type)) {
-        console.log('ev:', ev)
-        //soo we will not trigger the mouse ev
         ev.preventDefault()
-        //Gets the first touch point
         ev = ev.changedTouches[0]
-        //Calc the right pos according to the touch screen
         pos = {
             x: ev.pageX - ev.target.offsetLeft - ev.target.clientLeft,
             y: ev.pageY - ev.target.offsetTop - ev.target.clientTop,
@@ -190,18 +185,14 @@ function getEvPos(ev) {
 function isTextClicked(ev) {
     // ev.stopPropagation()
     const { x, y } = ev
-    // var fontHeight = parseInt(gCtx.font) * 1.2
-    // console.log(fontHeight);
     const clickedText = gMeme.lines.findIndex(line => {
         return (
-            // console.log( 'offsetX, offsetY',  x, y, ',posy:',line.posY,'txtwheight:', parseInt(gCtx.font) * 1.2)
             x >= line.posX && x <= line.posX + gCtx.measureText(line.txt).width &&
             y >= line.posY && y <= line.posY + line.size
         )
     })
     return clickedText
 }
-
 
 // SET CHANGES //
 
@@ -285,31 +276,60 @@ function searchTextInput(ev) {
     }
 }
 
-function getCanvasWidth() {
-    return gElCanvas.width
-}
-
-function getCanvasHeight() {
-    return gElCanvas.height
-}
-
-function addSticker(ev){
-    const sticker= ev.id
+function addSticker(ev) {
+    const sticker = ev.id
     addTextLine(ev.id)
     gCurrLine++
     renderMeme(gCurrMeme)
 }
 
-function saveMeme(){
-gMemes.push(gCurrMeme)
-saveToStorage(STORAGE_KEY, gMemes)
+function saveMeme() {
+    if (loadFromStorage(STORAGE_KEY)) gMemes = loadFromStorage(STORAGE_KEY)
+    const memeId = gMemes.findIndex(object => {
+        return object.selectedImgId === gCurrMeme.selectedImgId
+    })
+    if (memeId === -1) gMemes.push(gCurrMeme)
+    else {
+        gMemes.splice(memeId, 1)
+        gMemes.push(gCurrMeme)
+    }
+    saveToStorage(STORAGE_KEY, gMemes)
 }
 
-function setSavedMeme(id){
-    console.log(id, gMemes);
-    const savedMeme = gMemes.find(meme=>id===+meme.selectedImgId)
-    gCurrMeme=savedMeme
-    console.log(gCurrMeme);
-    setMeme(gCurrMeme)
+function setSavedMeme(id) {
+    const savedMeme = loadFromStorage(STORAGE_KEY)
+    const memeId = savedMeme.find(meme => id === +meme.selectedImgId)
+    gCurrMeme = memeId
+    setMeme(memeId)
     renderMeme()
+}
+
+function toggleMenu(){
+document.body.classList.toggle('menu-open')
+}
+
+//KEYWORDS//
+
+
+function renderKeyWords(){
+    const keyWords= getKeyWords()
+    saveToStorage(KEYWORDS_KEY,keyWords)
+    const arrKeyWords= Object.keys(keyWords).map(function(key){
+        let currElement = [key, keyWords[key]];
+        return currElement
+    })
+    const strHtml = arrKeyWords.map(keyWord=>{
+        const fontSize = 13+keyWord[1]+'px'
+        return `<a href="#" style="font-size:${fontSize}" onclick="OnKeyWordFilter(this)" id="${keyWord[0]}">${keyWord[0]}</a>`
+    })
+    elKeyWord= document.querySelector('.KeyWords')
+    elKeyWord.innerHTML = strHtml.join(' ')
+}
+
+function OnKeyWordFilter(keyWord){
+    increaseKeyWordSize(keyWord.id)
+    resetSearchKeys()
+    setSearchKeys(keyWord.id)
+    renderGallery()
+    renderKeyWords()
 }

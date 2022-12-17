@@ -12,12 +12,11 @@
 <body onload="init()">
     <header class="main-header full main-layout">
         <div class="header-container flex align-center space-between">
-            <div class="logo">Logo</div>
+            <div class="logo"><a href="#" onclick="toggleShown(this)" id="gallery">Animalᗰeme</a></div>
             <nav class="main-nav">
                 <ul class="flex clean-list nav-list">
                     <li><a href="#" id="gallery" onclick="toggleShown(this)">Gallery</a></li>
                     <li><a href="#" id="saved" onclick="toggleShown(this)">Saved</a></li>
-                    <li><a href="#" id="about" onclick="toggleShown(this)">About</a></li>
                 </ul>
             </nav>
             <button class="menu-toggle-btn" onclick="toggleMenu()">☰</button>
@@ -25,11 +24,23 @@
     </header>
 
     <section class="pages">
-        <section class="search-container">
-            <input type="file" class="file-input btn" name="image" onchange="onImgInput(event)" />
-            <label for="text"></label>
-            <input class="text" type="text" onkeydown="searchTextInput(event)" id="serach-text" name="text"
-                placeholder="Enter text">
+        <section class="search-container flex space-between">
+            <input class="text" type="text" onkeydown="searchTextInput(event)" id="serach-text" name="text" placeholder="Enter text">
+            <div class="KeyWords">
+                <!-- <a href="#" onclick="OnKeyWordFilter(this)" id="all">All</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="funny">funny</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="cat">cat</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="animal">animal</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="dog">dog</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="tired">tired</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="lazy">lazy</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="suprise">suprise</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="mood">mood</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="hair">hair</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="food">food</a>
+                <a href="#" onclick="OnKeyWordFilter(this)" id="work">work</a> -->
+
+            </div>
         </section>
         <section class="gallery shown">
             <section class="gallery-container">
@@ -39,7 +50,7 @@
         <section class="meme-container hidden">
             <section class="canvas-container flex">
                 <div class="canvas-container1">
-                    <canvas id="my-canvas" height="500" width="500"></canvas>
+                    <canvas id="my-canvas" height="350" width="350"></canvas>
                 </div>
                 <section class="editor-options">
                     <nav>
@@ -53,7 +64,7 @@
                                         src="./img/up-and-down-opposite-double-arrows-side-by-side.png"></button>
                                 <button onclick="onTrashLine()"><img src="./img/trash.png"></button>
                             </div>
-                            <div>
+                            <div class="fonts">
                                 <button onclick="onIncreaseFont()"><img src="./img/increase font - icon.png"></button>
                                 <button onclick="onDecreaseFont()"><img src="./img/decrease font - icon.png"></button>
                                 <button onclick="onAlignRight()"><img src="./img/align-to-right.png"></button>
@@ -62,7 +73,7 @@
                             </div>
                         </section>
                         <div>
-                            <section class="fonts-options">
+                            <section class="fonts fonts-options">
                                 <select id="fonts" onchange="onSetFont(this)">
                                     <option value="Impact">Impact</option>
                                     <option value="Arial">Arial</option>
@@ -91,7 +102,7 @@
 
                         <a href="#" class="btn download-img" onclick="downloadImg(this)"
                             download="my-img.jpg">Download</a>
-                        <button onclick="saveMeme()">Save</button>
+                        <button class="btn save" onclick="saveMeme()">Save</button>
 
                     </section>
                 </section>
@@ -101,8 +112,6 @@
         <section class="saved hidden">
             <section class="savedMeme-container">
             </section>
-            <section class="about hidden">About</section>
-        </section>
 
         <script src="js/storage.service.js"></script>
         <script src="js/memeController.js"></script>

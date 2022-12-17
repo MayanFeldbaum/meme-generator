@@ -2,19 +2,24 @@ canvas {
     display: block;
     outline: 1px solid black;
     background-color: white;
+    margin: 10px;
 }
-
 
 .canvas-container {
     background-color: rgb(225, 228, 232);
     margin-top: 20px;
     flex-basis: 1;
     flex-wrap: wrap;
-    width: 80vw;
+    width: 50vw;
     margin-left: auto;
     margin-right: auto;
     place-content: center;
     padding: 10px;
+    border-radius: 20px;
+}
+
+.canvas-container1 {
+    align-self: center;
 }
 
 .canvas nav {
@@ -28,6 +33,7 @@ canvas {
 nav>* {
     align-self: center;
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .shapes-btns button {
@@ -54,13 +60,50 @@ input {
     margin-bottom: 10px;
 }
 
-.highlighted{
+.highlighted {
     border: 3px black solid;
 }
 
-.stickers button{
-border: none;
-background-color: transparent;
+.stickers button {
+    border: none;
+    background-color: transparent;
     font-size: 50px;
 }
 
+@media (max-width: 780px) {
+    .canvas-container {
+        width: 100%;
+    }
+}
+
+.fonts {
+    margin-top: 10px;
+}
+
+.stickers {
+    padding: 10px;
+    background-color: var(--clr0);
+    border-radius: 10px;
+}
+
+.search-container {
+    background-color: var(--clr2);
+    height: 100px;
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    border-radius: 20px;
+    flex-wrap: wrap;
+    padding-inline-end: 20px;
+    padding-inline-start: 20px;
+}
+
+.search-container input{
+    margin-inline-start: 20px;
+    font-size: 1.5rem;
+}
+
+.search-container a{
+    font-size: 16px;
+    color: var(--clr4);
+}
