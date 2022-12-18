@@ -4,13 +4,10 @@ const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend']
 let gElCanvas
 let gCtx
 let gCurrMeme
-let gCurrImg
-let gstrokeStyleColor
 let gCurrLine = 0
 let gStartPos
 var gMemes = []
 
-// OPEN MEME //
 
 function init() {
     gElCanvas = document.getElementById('my-canvas')
@@ -56,6 +53,8 @@ function toggleShown(tab) {
     }
 }
 
+// OPEN MEME //
+
 function openMeme() {
     const elGallery = document.querySelector('.gallery')
     elGallery.classList.remove('shown')
@@ -78,7 +77,6 @@ function onImgSelect(img) {
 
 function renderMeme() {
     openMeme()
-    // gCurrMeme = getMeme()
     drawImg()
 }
 
@@ -95,7 +93,7 @@ function drawImg() {
     }
 }
 
-function drawText(text, x, y, idx) {
+function drawText(txt, x, y, idx) {
     const font = gCurrMeme.lines[idx].size + 'px' + ' ' + gCurrMeme.lines[idx].font
     gCtx.lineWidth = 2
     gCtx.strokeStyle = gCurrMeme.lines[idx].strokeColor
@@ -103,8 +101,8 @@ function drawText(text, x, y, idx) {
     gCtx.font = font
     gCtx.textAlign = gCurrMeme.lines[idx].align
     gCtx.textBaseline = 'middle'
-    gCtx.strokeText(text, x, y)
-    gCtx.fillText(text, x, y)
+    gCtx.strokeText(txt, x, y)
+    gCtx.fillText(txt, x, y)
 }
 
 // ADDLISTENERS //
@@ -114,11 +112,6 @@ function addListeners() {
     document.getElementById('fillerColor').addEventListener('input', fillerColorPicker)
     addMouseListeners()
     addTouchListeners()
-    // Listen for resize ev
-    // window.addEventListener('resize', () => {
-    //     resizeCanvas()
-    //     renderMeme()
-    // })
 }
 
 function addMouseListeners() {
@@ -198,13 +191,13 @@ function isTextClicked(ev) {
 
 function strokeColorPicker(ev) {
     const strokeColor = ev.target.value
-    updateStrokeColor(strokeColor, gCurrLine)
+    setStrokeColor(strokeColor, gCurrLine)
     renderMeme(gCurrMeme)
 }
 
 function fillerColorPicker(ev) {
     const fillerColor = ev.target.value
-    updateFillerColor(fillerColor, gCurrLine)
+    setFillerColor(fillerColor, gCurrLine)
     renderMeme(gCurrMeme)
 }
 
@@ -304,9 +297,6 @@ function setSavedMeme(id) {
     renderMeme()
 }
 
-function toggleMenu(){
-document.body.classList.toggle('menu-open')
-}
 
 //KEYWORDS//
 
@@ -333,3 +323,4 @@ function OnKeyWordFilter(keyWord){
     renderGallery()
     renderKeyWords()
 }
+

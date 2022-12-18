@@ -87,11 +87,11 @@ function getgImgs() {
     } return filterImgs
 }
 
-function updateStrokeColor(color, line) {
+function setStrokeColor(color, line) {
     gMeme.lines[line].strokeColor = color
 }
 
-function updateFillerColor(color, line) {
+function setFillerColor(color, line) {
     gMeme.lines[line].fillerColor = color
 }
 
@@ -139,7 +139,6 @@ function setTextDrag(line, txt) {
 function moveText(line, dx, dy) {
     gMeme.lines[line].posX += dx
     gMeme.lines[line].posY += dy
-
 }
 
 function getText(line) {

@@ -11,6 +11,7 @@
 
 <body onload="init()">
     <header class="main-header full main-layout">
+        <div class="main-screen full" onclick="toggleMenu()"></div>
         <div class="header-container flex align-center space-between">
             <div class="logo"><a href="#" onclick="toggleShown(this)" id="gallery">Animalᗰeme</a></div>
             <nav class="main-nav">
@@ -25,21 +26,9 @@
 
     <section class="pages">
         <section class="search-container flex space-between">
-            <input class="text" type="text" onkeydown="searchTextInput(event)" id="serach-text" name="text" placeholder="Enter text">
+            <input class="text" type="text" onkeydown="searchTextInput(event)"
+                id="serach-text" name="text" placeholder="Search meme">
             <div class="KeyWords">
-                <!-- <a href="#" onclick="OnKeyWordFilter(this)" id="all">All</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="funny">funny</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="cat">cat</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="animal">animal</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="dog">dog</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="tired">tired</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="lazy">lazy</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="suprise">suprise</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="mood">mood</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="hair">hair</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="food">food</a>
-                <a href="#" onclick="OnKeyWordFilter(this)" id="work">work</a> -->
-
             </div>
         </section>
         <section class="gallery shown">
@@ -113,14 +102,13 @@
             <section class="savedMeme-container">
             </section>
 
-        <script src="js/storage.service.js"></script>
-        <script src="js/memeController.js"></script>
-        <script src="js/upload.controller.js"></script>
-        <script src="js/upload.service.js"></script>
-        <script src="js/memeController.js"></script>
-        <script src="js/memeService.js"></script>
-        <script src="js/savedMemeController.js"></script>
-        <script src="js/galleryController.js"></script>
+            <script src="js/service/storage.service.js"></script>
+            <script src="js/upload.controller.js"></script>
+            <script src="js/service/upload.service.js"></script>
+            <script src="js/meme.controller.js"></script>
+            <script src="js/service/meme.service.js"></script>
+            <script src="js/savedMeme.controller.js"></script>
+            <script src="js/gallery.controller.js"></script>
 </body>
 
 </html>
